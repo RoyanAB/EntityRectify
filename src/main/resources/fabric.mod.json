@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "entityrectify",
+	"version": "${version}",
+	"name": "EntityRectify",
+	"description": "A mod about High Precision Entity Alignment",
+	"authors": [
+		"ABxl_lly"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/entityrectify/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"cn.royan.entityrectify.EntityRectify"
+		]
+	},
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": "*",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"accessWidener": "entityrectify.accesswidener",
+	"suggests": {
+		"another-mod": "*"
+	}
+}
