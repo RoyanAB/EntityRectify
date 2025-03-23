@@ -6,10 +6,12 @@ import cn.royan.entityrectify.util.ClientMethod;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.BlockPosArgumentType;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +32,9 @@ public class EntityRectifyCommand {
                         .executes(EntityRectifyCommand::clear))
                 .then(ClientCommandManager.literal("calculate")
                         .then(ClientCommandManager.argument("value", DoubleArgumentType.doubleArg())
-                                .executes(EntityRectifyCommand::calculate)))
+                                .then(ClientCommandManager.argument("direction", StringArgumentType.word())
+                                        .suggests( (c, b) -> CommandSource.suggestMatching(new String[]{"xz", "y"},b))
+                                        .executes(EntityRectifyCommand::calculate))))
                 .then(ClientCommandManager.literal("start")
                         .then(ClientCommandManager.argument("pos1", CBlockPosArgumentType.blockPos())
                                 .then(ClientCommandManager.argument("pos2", CBlockPosArgumentType.blockPos())
@@ -65,7 +69,8 @@ public class EntityRectifyCommand {
     private static int calculate(CommandContext<FabricClientCommandSource> context) {
         step.clear();
         double value = DoubleArgumentType.getDouble(context, "value");
-        double x = -value + 2.0625D;
+        boolean dirt = StringArgumentType.getString(context, "direction").equals("y");
+        double x = dirt ? -value + 2.0625D : value + 1D;
         String mt = String.format("%64s", Long.toBinaryString(Double.doubleToLongBits(x))).replace(" ", "0");
 
         for (int i=0; i<7; i++){
